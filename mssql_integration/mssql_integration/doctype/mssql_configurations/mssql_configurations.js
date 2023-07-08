@@ -17,7 +17,7 @@ frappe.ui.form.on("Journal Entry", {
       },
     });
     if (!resp.message.success) {
-      frappe.throw("check your db configuration");
+      frappe.throw(resp.message.message);
     }
   },
 });
