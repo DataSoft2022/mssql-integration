@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include mssql_integration *.css
+recursive-include mssql_integration *.csv
+recursive-include mssql_integration *.html
+recursive-include mssql_integration *.ico
+recursive-include mssql_integration *.js
+recursive-include mssql_integration *.json
+recursive-include mssql_integration *.md
+recursive-include mssql_integration *.png
+recursive-include mssql_integration *.py
+recursive-include mssql_integration *.svg
+recursive-include mssql_integration *.txt
+recursive-exclude mssql_integration *.pyc
