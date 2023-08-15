@@ -1,19 +1,30 @@
 import frappe
-import time
 from sqlalchemy import create_engine
 from sqlalchemy import text
+from sqlalchemy.engine import URL
 import json
-
+from sqlalchemy.exc import DBAPIError;
 
 def setup_db():
     attr = frappe.get_single('Mssql Configurations')
     username = attr.username
     password = attr.get_password('password')
-    ip = attr.ipport
+    [ip, port] = attr.ipport.split(':')
+    driver = attr.driver
     db_name = attr.db_name
-    engine = create_engine(
-        f"mssql+pymssql://{attr.username}:{password}@{ip}/{db_name}",
-        echo=True)
+    connection_string = (
+        f"DRIVER=ODBC Driver {driver} for SQL Server;"
+        f"SERVER={ip};"
+        f"DATABASE={db_name};"
+        f"UID={username};"
+        f"TrustServerCertificate=Yes;"
+        f"TrustServerCertificate=yes;"
+        f"PWD={password}"
+    )
+
+    engine = create_engine(URL.create("mssql+pyodbc", query={"odbc_connect": connection_string}))
+
+
     return engine
 
 
@@ -22,6 +33,7 @@ def send_to_mssql(frm):
     engine = setup_db()
     frm = json.loads(frm)
     company = frappe.get_doc('Company', frm.get('company'))
+    
     try:
         with engine.connect() as conn:
             conn.execute(
@@ -49,5 +61,7 @@ def send_to_mssql(frm):
                     })
             conn.commit()
         return {"success": True}
-    except:
+    except DBAPIError: 
+       # print("exception  ", e.__class__.__name__)
+       #frappe.render_form()
         return {"success": False, "message": "check db configurations"}

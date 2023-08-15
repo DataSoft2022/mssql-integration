@@ -11,7 +11,8 @@
   "password",
   "column_break_td1yz",
   "ipport",
-  "db_name"
+  "db_name",
+  "driver"
  ],
  "fields": [
   {
@@ -38,12 +39,17 @@
   {
    "fieldname": "column_break_td1yz",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Int",
+   "label": "Driver"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-07-08 08:31:17.416273",
+ "modified": "2023-08-15 08:36:26.228145",
  "modified_by": "Administrator",
  "module": "Mssql Integration",
  "name": "Mssql Configurations",

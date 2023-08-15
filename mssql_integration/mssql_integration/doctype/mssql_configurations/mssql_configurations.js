@@ -17,7 +17,7 @@ frappe.ui.form.on("Journal Entry", {
       },
     });
     if (!resp.message.success) {
-      frappe.throw(resp.message.message);
+      frm.reload_doc().then(() => frappe.throw(resp.message.message));
     }
   },
 });
