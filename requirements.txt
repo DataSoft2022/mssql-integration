@@ -1,1 +1,2 @@
-# frappe -- https://github.com/frappe/frappe is installed via 'bench init'
+SQLAlchemy==2.0.18
+pyodbc==4.0.39
