@@ -33,17 +33,16 @@ def send_to_mssql(frm):
     engine = setup_db()
     frm = json.loads(frm)
     company = frappe.get_doc('Company', frm.get('company'))
-    
     try:
         with engine.connect() as conn:
             conn.execute(
-                text(
+                text(   
                     "insert into OBTF (TransId, RefDate, DueDate, WritingDate, Memo) values (:trans_id, :ref_date, :due_date, :writing_date, :memo)"
                 ), {
                     "trans_id": frm.get("name"),
                     "ref_date": frm.get("posting_date"),
-                    "due_date": frm.get("creation"),
-                    "writing_date": frm.get("creation"),
+                    "due_date": frm.get("creation").split()[0].strip(),
+                    "writing_date": frm.get("creation").split()[0].strip(),
                     "memo": frm.get("user_remark")
                 })
 
@@ -52,7 +51,7 @@ def send_to_mssql(frm):
                     text(
                         "insert into BTF1 (TransId, Line_ID, Account, Debit, Credit, FCCurrency) values (:trans_id, :line_id, :account, :debit, :credit, :fc_currency)"
                     ), {
-                        "trans_id": account.get("name"),
+                        "trans_id": account.get("name").split("-")[0].strip(),
                         "line_id": account.get("idx"),
                         "account": account.get("account"),
                         "debit": account.get("debit"),
