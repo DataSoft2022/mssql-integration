@@ -3,7 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import text
 from sqlalchemy.engine import URL
 import json
-from sqlalchemy.exc import DBAPIError;
+from sqlalchemy.exc import DBAPIError
+
 
 def setup_db():
     attr = frappe.get_single('Mssql Configurations')
@@ -12,18 +13,16 @@ def setup_db():
     [ip, port] = attr.ipport.split(':')
     driver = attr.driver
     db_name = attr.db_name
-    connection_string = (
-        f"DRIVER=ODBC Driver {driver} for SQL Server;"
-        f"SERVER={ip};"
-        f"DATABASE={db_name};"
-        f"UID={username};"
-        f"TrustServerCertificate=Yes;"
-        f"TrustServerCertificate=yes;"
-        f"PWD={password}"
-    )
+    connection_string = (f"DRIVER=ODBC Driver {driver} for SQL Server;"
+                         f"SERVER={ip};"
+                         f"DATABASE={db_name};"
+                         f"UID={username};"
+                         f"TrustServerCertificate=Yes;"
+                         f"TrustServerCertificate=yes;"
+                         f"PWD={password}")
 
-    engine = create_engine(URL.create("mssql+pyodbc", query={"odbc_connect": connection_string}))
-
+    engine = create_engine(
+        URL.create("mssql+pyodbc", query={"odbc_connect": connection_string}))
 
     return engine
 
@@ -36,7 +35,7 @@ def send_to_mssql(frm):
     try:
         with engine.connect() as conn:
             conn.execute(
-                text(   
+                text(
                     "insert into OBTF (TransId, RefDate, DueDate, WritingDate, Memo) values (:trans_id, :ref_date, :due_date, :writing_date, :memo)"
                 ), {
                     "trans_id": frm.get("name"),
@@ -51,7 +50,7 @@ def send_to_mssql(frm):
                     text(
                         "insert into BTF1 (TransId, Line_ID, Account, Debit, Credit, FCCurrency) values (:trans_id, :line_id, :account, :debit, :credit, :fc_currency)"
                     ), {
-                        "trans_id": account.get("name").split("-")[0].strip(),
+                        "trans_id": account.get("name"),
                         "line_id": account.get("idx"),
                         "account": account.get("account"),
                         "debit": account.get("debit"),
@@ -60,7 +59,7 @@ def send_to_mssql(frm):
                     })
             conn.commit()
         return {"success": True}
-    except DBAPIError: 
-       # print("exception  ", e.__class__.__name__)
-       #frappe.render_form()
+    except DBAPIError:
+        # print("exception  ", e.__class__.__name__)
+        #frappe.render_form()
         return {"success": False, "message": "check db configurations"}
