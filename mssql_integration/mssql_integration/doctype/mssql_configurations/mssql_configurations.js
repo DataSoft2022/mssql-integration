@@ -7,7 +7,7 @@ frappe.ui.form.on("Mssql Configurations", {
 });
 
 frappe.ui.form.on("Journal Entry", {
-  before_submit: async function (frm) {
+  on_submit: async function (frm) {
     let resp = await frappe.call({
       method: "mssql_integration.api.mssql_server.send_to_mssql",
       type: "POST",
