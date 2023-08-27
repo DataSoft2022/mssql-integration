@@ -46,13 +46,14 @@ def send_to_mssql(frm):
                 })
 
             for account in frm.get("accounts"):
+                account_doc = frappe.get_doc('Account', account["account"])
                 conn.execute(
                     text(
                         "insert into BTF1 (TransId, Line_ID, Account, Debit, Credit, FCCurrency) values (:trans_id, :line_id, :account, :debit, :credit, :fc_currency)"
                     ), {
                         "trans_id": account.get("name"),
                         "line_id": account.get("idx"),
-                        "account": account.get("account"),
+                        "account": account.account_number,
                         "debit": account.get("debit"),
                         "credit": account.get("credit"),
                         "fc_currency": company.default_currency
