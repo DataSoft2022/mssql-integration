@@ -53,7 +53,7 @@ def send_to_mssql(frm):
                     ), {
                         "trans_id": account.get("name"),
                         "line_id": account.get("idx"),
-                        "account": account.account_number,
+                        "account": account_doc.account_number,
                         "debit": account.get("debit"),
                         "credit": account.get("credit"),
                         "fc_currency": company.default_currency
