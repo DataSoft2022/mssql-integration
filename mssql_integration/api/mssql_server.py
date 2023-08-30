@@ -51,7 +51,7 @@ def send_to_mssql(frm):
                     text(
                         "insert into BTF1 (TransId, Line_ID, Account, Debit, Credit, FCCurrency) values (:trans_id, :line_id, :account, :debit, :credit, :fc_currency)"
                     ), {
-                        "trans_id": account.get("name"),
+                        "trans_id":  frm.get("name"),
                         "line_id": account.get("idx"),
                         "account": account_doc.account_number,
                         "debit": account.get("debit"),
